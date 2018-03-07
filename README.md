@@ -1,9 +1,18 @@
 # ToonRooter
 
 ## What it does
-This application roots your Toon. *Well, like, sort of. It's not finished yet, but it will!*
+This application roots your Toon from a Raspberry Pi. *Well, like, sort of. It's not finished yet, but it will!*
+At the moment, the following is implemented:
+ - Detection of the U-Boot version
+ - Loading of modified U-Boot version using JTAG
+ - Logging in to supported versions of U-Boot
 
-## How?
+### What it will do in the near future
+ - Setting up the U-Boot environment so the Toon boots into a serial console
+ - Install and set up dropbear and sftp-server to let root user log in using an ssh key
+ - Modify the firewall settings to enable remote access to ssh and http server
+
+## How to use it?
 
 Connect your Toon's debugging header to a Raspberry Pi according to the following pin assignments:
 
@@ -35,6 +44,8 @@ git clone https://github.com/martenjacobs/ToonRooter.git
 cd ToonRooter
 sudo python .
 ```
+
+Reset your Toon and let the magic happen :)
 
 ## Dependencies
 
