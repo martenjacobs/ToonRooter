@@ -27,23 +27,65 @@ def do_root(port, has_jtag):
     if uboot_version in uboot_passwords:
         log.info("Using password to log in")
         access_uboot(port, uboot_passwords[uboot_version])
+        patch_uboot(port)
     elif has_jtag is False:
-        log.error("Unable to log in using password, need a JTAG debugger")
+        log.error("Unable to log in using password (need a JTAG debugger, but it's disabled)")
         return
     else:
         log.info("Loading new bootloader")
-        start_bootloader(has_jtag, "u-boot.bin")
+        start_bootloader("u-boot.bin")
         port.reset_input_buffer()
         do_root(port, None)
 
 
+
+
+def read_uboot_version(port):
+    version_line_match = re.compile(r'^U-Boot ([^ ]+)')
+    while True:
+        line = port.readline().strip()
+        match = version_line_match.match(line)
+        if match:
+            return match.group(1)
+
 def access_uboot(port, password):
+    log.debug("Logging in to U-Boot")
     port.write(password)
     port.flush()
-    log.info("Logged in to uboot")
-    pass
+    port.read_until("U-Boot>")
+    log.info("Logged in to U-Boot")
 
-def start_bootloader(has_jtag, bin_path):
+def patch_uboot(port):
+    log.debug("Patching U-Boot")
+    port.reset_input_buffer()
+    sleep(0.1)
+    port.write("printenv\n")
+    port.flush()
+    add_misc_match = re.compile(r'^addmisc=(.+)$')
+    add_misc_val = None
+
+    sleep(0.5)
+
+    lines = port.read_until("U-Boot>")
+    for line in lines.split('\n'):
+        line = line.strip()
+        log.debug(line)
+        match = add_misc_match.match(line)
+        if match:
+            add_misc_val = match.group(1)
+
+    if add_misc_val is None:
+        log.error("Could not find value for addmisc environment variable")
+        return
+
+    cmd = "setenv addmisc " + re.sub(r'([\$;])',r'\\\1', add_misc_val + " init=/bin/sh")
+    port.write(cmd + "\n")
+    port.flush()
+    log.debug(port.read_until("U-Boot>"))
+    port.write("run boot_nand\n")
+    port.flush()
+
+def start_bootloader(bin_path):
 
     log.info("Starting openocd")
 
@@ -75,11 +117,3 @@ def start_bootloader(has_jtag, bin_path):
         raise
 
     proc.terminate()
-
-def read_uboot_version(port):
-    version_line_match = re.compile(r'U-Boot ([^ ]+)')
-    while True:
-        line = port.readline().strip()
-        match = version_line_match.match(line)
-        if match:
-            return match.group(1)

@@ -6,9 +6,9 @@ At the moment, the following is implemented:
  - Detection of the U-Boot version
  - Loading of modified U-Boot version using JTAG
  - Logging in to supported versions of U-Boot
+ - Setting up the U-Boot environment so the Toon boots into a serial console
 
 ### What it will do in the near future
- - Setting up the U-Boot environment so the Toon boots into a serial console
  - Install and set up dropbear and sftp-server to let root user log in using an ssh key
  - Modify the firewall settings to enable remote access to ssh and http server
 
