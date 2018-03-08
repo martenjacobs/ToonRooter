@@ -4,6 +4,8 @@ import re
 import telnetlib
 import os
 import subprocess
+import tarfile
+import base64
 from time import sleep
 
 logging.basicConfig(level=logging.DEBUG)
@@ -28,6 +30,9 @@ def do_root(port, has_jtag):
         log.info("Using password to log in")
         access_uboot(port, uboot_passwords[uboot_version])
         patch_uboot(port)
+        write_payload(port)
+        patch_toon(port)
+
     elif has_jtag is False:
         log.error("Unable to log in using password (need a JTAG debugger, but it's disabled)")
         return
@@ -49,14 +54,14 @@ def read_uboot_version(port):
             return match.group(1)
 
 def access_uboot(port, password):
-    log.debug("Logging in to U-Boot")
+    log.info("Logging in to U-Boot")
     port.write(password)
     port.flush()
-    port.read_until("U-Boot>")
-    log.info("Logged in to U-Boot")
+    log.debug(port.read_until("U-Boot>"))
+    log.debug("Logged in to U-Boot")
 
 def patch_uboot(port):
-    log.debug("Patching U-Boot")
+    log.info("Patching U-Boot")
     port.reset_input_buffer()
     sleep(0.1)
     port.write("printenv\n")
@@ -67,6 +72,7 @@ def patch_uboot(port):
     sleep(0.5)
 
     lines = port.read_until("U-Boot>")
+    log.debug(lines)
     for line in lines.split('\n'):
         line = line.strip()
         log.debug(line)
@@ -85,6 +91,39 @@ def patch_uboot(port):
     port.write("run boot_nand\n")
     port.flush()
 
+def write_payload(port):
+
+    tar_path = 'payload.tar.gz'
+
+    with tarfile.open(tar_path, "w:gz") as tar:
+        tar.add("payload/patch_toon.sh")
+
+
+    log.debug(port.read_until("/ # "))
+    port.write("base64 -d | tar zxf -\n")
+    port.flush()
+    #(tarr, tarw) = os.pipe()
+    #tar = tarfile.open(mode='w|gz', fileobj=tarw)
+    #tar.add("payload/patch_toon.sh")
+
+    with open(tar_path, 'r') as f:
+        base64.encode(f, port)
+
+    os.remove(tar_path)
+
+    port.flush()
+    port.reset_input_buffer()
+    port.write("\x04")
+    port.flush()
+
+def patch_toon(port):
+    log.info("Patching Toon")
+    log.debug(port.read_until("/ # "))
+    port.write("sh payload/patch_toon.sh\n")
+    log.debug(port.read_until("/ # "))
+    port.write("rm -r payload\n")
+    log.debug(port.read_until("/ # "))
+
 def start_bootloader(bin_path):
 
     log.info("Starting openocd")
@@ -98,15 +137,18 @@ def start_bootloader(bin_path):
         sleep(wait)
         client = telnetlib.Telnet('localhost', 4444)
         log.debug(client.read_until("> "))
+        log.info("Halting CPU")
         client.write("soft_reset_halt\n")
         log.debug(client.read_until("> "))
         sleep(0.1)
         client.write("reset halt\n")
         log.debug(client.read_until("> "))
         sleep(0.1)
+        log.info("Loading new image to RAM")
         client.write("load_image {} 0xa1f00000\n".format(bin_path))
         log.debug(client.read_until("> "))
         sleep(0.1)
+        log.info("Starting up new image")
         client.write("resume 0xa1f00000\n")
     except:
         try:

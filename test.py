@@ -1,5 +1,13 @@
 import rooter
+import serial
 
 
-with open('minicom.cap', 'r') as f:
-    rooter.do_root(f)
+port=serial.Serial(
+        port='/dev/serial0',
+        baudrate=115200
+    )
+
+port.write("\n")
+port.flush()
+rooter.write_payload(port)
+rooter.patch_toon(port)
