@@ -39,6 +39,10 @@ fi
 set -e
 
 mkdir -p /root/.ssh/
-cat <<EOF > /root/.ssh/authorized_keys
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC2EwjrFPhqFidiQswrSG/2srO9iiZM6R08PvLxT9xKGsAOGIEIbGVb19BmtfHVQYWpMktpfJt8cFDX9YIrPvluE2l735yrKz5tYe4+t5yb7WKmYVVMO1RNK8Iwl3ck0baAskLLLa9oX+AnDIqTZQUZhbp6N2lCdCanFYoZNztoGOBHAdbYNaewp6Oy6/m/yegcw6y8bS0SWs89tV8/ZfxIjIJI+prlnEUrtr/gsOZXXWrAixIiGU+Pqb8M9InWJbKTP1iHNUf+cEHYulEtZbK0Csk9XUHFOiDmjqzBT16BaaK9CAC/Ddh/vOqZ+Mz1SnheGcSvO8Na4VJfgIhropjz
-EOF
+# append our key to the authorized keys file
+cat id_rsa.pub >> /root/.ssh/authorized_keys
+# append a line feed
+echo >> /root/.ssh/authorized_keys
+
+# TODO: remove duplicate lines from authorized_keys. This may do the trick:
+# awk '!a[$0]++' /root/.ssh/authorized_keys
