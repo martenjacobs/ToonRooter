@@ -80,7 +80,7 @@ log.debug(json.dumps({
     "reboot_after" : reboot_after,
     "boot_only" : boot_only
 }))
-r"""
+
 rooter.root(
     path = serial_path,
     ssh_pubkey_data = ssh_pubkey_data,
@@ -88,4 +88,4 @@ rooter.root(
     check_uboot = check_current_bootloader,
     cleanup_payload = cleanup_payload,
     reboot_after = reboot_after,
-    boot_only = boot_only)"""
+    boot_only = boot_only)
