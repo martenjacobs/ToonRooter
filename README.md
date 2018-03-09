@@ -74,8 +74,8 @@ Then reset your Toon and let the magic happen :)
 ## Install OpenOCD
 If your Toon has a newer U-Boot version than 2010-R8, a JTAG interface is required to
 upload a bootloader that we have access to through the serial console. To do this,
-you need to build a version of OpenOCD (at the time of writing the version in apt is not
-new enough).
+you need to build a version of OpenOCD (at the time of writing the version in apt
+doesn't support using the Pi's headers as JTAG debugger).
 
 ```bash
 git clone --recursive git://git.code.sf.net/p/openocd/code openocd
