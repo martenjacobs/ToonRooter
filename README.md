@@ -1,7 +1,8 @@
 # ToonRooter
 
 ## What it does
-This application roots your Toon from a Raspberry Pi. *Well, like, sort of. It's not finished yet, but it will!*
+This application roots your Toon from a Raspberry Pi.
+
 At the moment, the following is implemented:
  - Detection of the U-Boot version
  - Loading of modified U-Boot version using JTAG
@@ -9,13 +10,28 @@ At the moment, the following is implemented:
  - Setting up the U-Boot environment so the Toon boots into a serial console
  - Install and set up dropbear and sftp-server to let root user log in using an ssh key
  - Modify the firewall settings to enable remote access to ssh and http server
+- Generate SSH keys or let the user supply their own
 
-### What it will do in the near future
- - Generate SSH keys or let the user supply their own
- - Give you some control about what happens through command line arguments
+### What it might do in the more distant future
+ - More fine-grained control of the installation package
+
+## How safe is it?
+
+I don't know.
+
+You'll probably be fine. We're not overwriting the bootloader or important parts
+of the OS, so I don't see it really breaking anything, but you should make sure all wires are connected
+correctly, because otherwise you might short out something and break your Pi, Toon or both. If you are
+having issues with your Toon, run this application again with the `--boot_only` flag set. When it's finished
+you should be able to access a serial console on the Toon and check out what's wrong. To find some
+'usual suspects', look through `payload/patch_toon.sh`, which is the script that's actually run on the Toon
+to enable SSH access. The rest of the application basically just opens an injection vector to make that
+possible.
 
 ## How to use it?
 
+Make sure there's no power going in to either of the devices, and double check the connections
+before powering up again.
 Connect your Toon's debugging header to a Raspberry Pi according to the following pin assignments:
 
 | Toon | Signal | Pi   |
@@ -47,7 +63,7 @@ cd ToonRooter
 sudo python .
 ```
 
-Reset your Toon and let the magic happen :)
+Then reset your Toon and let the magic happen :)
 
 ## Dependencies
 

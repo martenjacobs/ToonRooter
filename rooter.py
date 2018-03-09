@@ -8,43 +8,52 @@ import tarfile
 import base64
 from time import sleep
 from serial.serialutil import Timeout
+import StringIO
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
-def root(path, has_jtag=False, no_check_uboot=False):
+def root(path, ssh_pubkey_data, has_jtag=False, check_uboot=True,
+                cleanup_payload=True, reboot_after=True, boot_only=False):
     port=serial.Serial(
         port=path,
         baudrate=115200
     )
-    do_root(port, has_jtag, no_check_uboot)
-    log.info("Your Toon is now rooted. Please wait for it to boot up and try to log in using SSH")
+    do_root(port, ssh_pubkey_data, has_jtag, check_uboot, cleanup_payload, reboot_after, boot_only)
 
-def do_root(port, has_jtag=False, no_check_uboot=False):
-    if not no_check_uboot:
+def do_root(port, ssh_pubkey_data, has_jtag=False, check_uboot=True,
+                    cleanup_payload=True, reboot_after=True, boot_only=False):
+    if check_uboot:
         uboot_passwords={
             "2010.09-R6" : "f4E9J",
             "2010.09-R8" : "3BHf2",
             "2010.09"    : "toon"
         }
+        log.info("Waiting for Toon to restart")
         uboot_version=read_uboot_version(port)
         log.info("Toon has U-Boot version {}".format(uboot_version))
         if uboot_version in uboot_passwords:
             log.info("Using password to log in")
             access_uboot(port, uboot_passwords[uboot_version])
             patch_uboot(port)
-            log.info("Waiting for boot up")
-            write_payload(port)
-            patch_toon(port)
+            if boot_only:
+                log.info("Your Toon is now booting into a serial console")
+            else:
+                log.info("Waiting for boot up")
+                write_payload(port, ssh_pubkey_data)
+                patch_toon(port, cleanup_payload, reboot_after)
+                log.info("Your Toon is now rooted. Please wait for it to boot up and try to log in using SSH")
             return
         elif has_jtag is False:
-            log.error("Unable to log in using password (need a JTAG debugger, but it's disabled)")
+            log.error("Unable to log in using password (need JTAG, but it's disabled)")
             return
     if has_jtag:
         log.info("Loading new bootloader")
-        start_bootloader("u-boot.bin")
+        start_bootloader("assets/u-boot.bin")
         port.reset_input_buffer()
-        do_root(port, True)
+        do_root(port, ssh_pubkey_data, False, True,
+                        cleanup_payload, reboot_after,
+                        boot_only)
     else:
         log.error("Need JTAG when rooting without manual reset")
         return
@@ -98,13 +107,21 @@ def patch_uboot(port):
     port.write("run boot_nand\n")
     port.flush()
 
-def write_payload(port):
-
-    tar_path = 'payload.tar.gz'
-
+def create_payload_tar(tar_path, ssh_key):
     with tarfile.open(tar_path, "w:gz") as tar:
         tar.add('payload/', arcname='payload')
 
+        ssh_key_str = StringIO.StringIO(ssh_key)
+
+        info = tarfile.TarInfo(name="payload/id_rsa.pub")
+        info.size=len(ssh_key)
+
+        tar.addfile(tarinfo=info, fileobj=StringIO.StringIO(ssh_key))
+
+
+def write_payload(port, ssh_key):
+    tar_path = 'payload.tar.gz'
+    create_payload_tar(tar_path, ssh_key)
 
     log.debug(port.read_until("/ # "))
     port.write("base64 -d | tar zxf -\n")
@@ -124,7 +141,7 @@ def write_payload(port):
     port.write("\x04")
     port.flush()
 
-def patch_toon(port):
+def patch_toon(port, clean_up, reboot):
     log.info("Patching Toon")
     log.debug(port.read_until("/ # "))
     port.write("sh payload/patch_toon.sh\n")
@@ -140,17 +157,24 @@ def patch_toon(port):
     except:
         log.exception("Script failed")
         sleep(5)
-    log.info("Cleaning up")
-    port.write("rm -r payload\n")
-    log.debug(port.read_until("/ # "))
-    port.write("/etc/init.d/reboot\n")
+    if clean_up:
+        log.info("Cleaning up")
+        port.write("rm -r payload\n")
+        log.debug(port.read_until("/ # "))
+    if reboot:
+        log.info("Rebooting")
+        port.write("/etc/init.d/reboot\n")
 
 def start_bootloader(bin_path):
 
     log.info("Starting openocd")
 
-    proc = subprocess.Popen(['openocd', '-s', '/usr/share/openocd', '-f', 'raspberrypi.cfg', '-f', 'ed20.cfg'],
-                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc = subprocess.Popen([
+        'openocd',
+            '-s', '/usr/share/openocd',
+            '-f', 'assets/raspberrypi.cfg',
+            '-f', 'assets/ed20.cfg'
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     try:
         wait = 10
