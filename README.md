@@ -10,9 +10,10 @@ At the moment, the following is implemented:
  - Setting up the U-Boot environment so the Toon boots into a serial console
  - Install and set up dropbear and sftp-server to let root user log in using an ssh key
  - Modify the firewall settings to enable remote access to ssh and http server
-- Generate SSH keys or let the user supply their own
+ - Generate SSH keys or let the user supply their own
 
 ### What it might do in the more distant future
+ - Check the output from a few commands so we know if we're successful...
  - More fine-grained control of the installation package
 
 ## How safe is it?
