@@ -7,10 +7,12 @@ At the moment, the following is implemented:
  - Loading of modified U-Boot version using JTAG
  - Logging in to supported versions of U-Boot
  - Setting up the U-Boot environment so the Toon boots into a serial console
-
-### What it will do in the near future
  - Install and set up dropbear and sftp-server to let root user log in using an ssh key
  - Modify the firewall settings to enable remote access to ssh and http server
+
+### What it will do in the near future
+ - Generate SSH keys or let the user supply their own
+ - Give you some control about what happens through command line arguments
 
 ## How to use it?
 
@@ -20,9 +22,9 @@ Connect your Toon's debugging header to a Raspberry Pi according to the followin
 |:----:|:------:|:----:|
 |  1   |  RTCK  |      |
 |  2   |  TRST  |  24  |
-|  3   |  GND   |  20  |
+|  3   |  GND   |  25  |
 |  4   |  TCK   |  23  |
-|  5   |  GND   |  25  |
+|  5   |  GND   |  20  |
 |  6   |  TMS   |  22  |
 |  7   |  SRST  |  18  |
 |  8   |  TDI   |  19  |
