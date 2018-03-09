@@ -60,10 +60,53 @@ Then get and run this application:
 ```bash
 git clone https://github.com/martenjacobs/ToonRooter.git
 cd ToonRooter
-sudo python .
+sudo python . --jtag-available
 ```
 
 Then reset your Toon and let the magic happen :)
+
+## Command line arguments
+
+```
+usage: ToonRooter [-h] [--serial-port PATH] [--ssh-public-key PATH]
+                  [--output-ssh-key PATH] [--private-key-password PASSWORD]
+                  [--output-level INFO|DEBUG] [--jtag-available]
+                  [--dont-check-uboot] [--dont-cleanup_payload]
+                  [--dont-reboot_after] [--boot-only]
+
+Root your Toon.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --serial-port PATH    The path of the serial port to use
+  --ssh-public-key PATH
+                        The path to an RSA public key which should be an
+                        allowed key on the Toon after rooting it. If not
+                        supplied, a key pair is generated
+  --output-ssh-key PATH
+                        The path to output a generated key pair (the public
+                        key will have a .pub suffix). Default is to write
+                        id_rsa and id_rsa.pub in the current directory.
+                        Ignored if you've used --ssh-public-key
+  --private-key-password PASSWORD
+                        The password that should be used to encrypt the
+                        private key when it's generated. Default is to use no
+                        encryption. Ignored if you've used --ssh-public-key
+  --output-level INFO|DEBUG
+                        The level of output to print to the console
+  --jtag-available      Indicates you have your Pi connected to your Toon's
+                        JTAG headers
+  --dont-check-uboot    Don't check whether we can access the installer
+                        version of U-Boot before using JTAG to start up the
+                        custom one.
+  --dont-cleanup_payload
+                        Leave the payload in /payload. Use this if you want to
+                        include more files and do something with them.
+  --dont-reboot_after   Don't reboot the Toon after rooting it. Use this if
+                        you want to use the serial console after rooting
+  --boot-only           Don't install the payload, just boot into the serial
+                        console
+```
 
 ## Dependencies
 
