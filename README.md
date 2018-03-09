@@ -68,7 +68,7 @@ Then reset your Toon and let the magic happen :)
 ## Command line arguments
 
 ```
-usage: ToonRooter [-h] [--serial-port PATH] [--ssh-public-key PATH]
+usage: sudo python . [-h] [--serial-port PATH] [--ssh-public-key PATH]
                   [--output-ssh-key PATH] [--private-key-password PASSWORD]
                   [--output-level INFO|DEBUG] [--jtag-available]
                   [--dont-check-uboot] [--dont-cleanup_payload]

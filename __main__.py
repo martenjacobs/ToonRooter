@@ -2,7 +2,7 @@
 import argparse
 
 
-parser = argparse.ArgumentParser(prog='ToonRooter',
+parser = argparse.ArgumentParser(prog='sudo python .',
                                  description='Root your Toon.')
 
 parser.add_argument('--serial-port',
