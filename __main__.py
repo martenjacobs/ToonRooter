@@ -29,8 +29,8 @@ parser.add_argument('--output-level',
 
 parser.add_argument('--jtag-available',         action='store_true', help='Indicates you have your Pi connected to your Toon\'s JTAG headers')
 parser.add_argument('--dont-check-uboot',       action='store_true', help='Don\'t check whether we can access the installer version of U-Boot before using JTAG to start up the custom one.')
-parser.add_argument('--dont-cleanup_payload',   action='store_true', help='Leave the payload in /payload. Use this if you want to include more files and do something with them.')
-parser.add_argument('--dont-reboot_after',      action='store_true', help='Don\'t reboot the Toon after rooting it. Use this if you want to use the serial console after rooting')
+parser.add_argument('--dont-cleanup-payload',   action='store_true', help='Leave the payload in /payload. Use this if you want to include more files and do something with them.')
+parser.add_argument('--dont-reboot-after',      action='store_true', help='Don\'t reboot the Toon after rooting it. Use this if you want to use the serial console after rooting')
 parser.add_argument('--boot-only',              action='store_true', help='Don\'t install the payload, just boot into the serial console')
 
 

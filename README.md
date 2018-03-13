@@ -23,7 +23,7 @@ I don't know.
 You'll probably be fine. We're not overwriting the bootloader or important parts
 of the OS, so I don't see it really breaking anything, but you should make sure all wires are connected
 correctly, because otherwise you might short out something and break your Pi, Toon or both. If you are
-having issues with your Toon, run this application again with the `--boot_only` flag set. When it's finished
+having issues with your Toon, run this application again with the `--boot-only` flag set. When it's finished
 you should be able to access a serial console on the Toon and check out what's wrong. To find some
 'usual suspects', look through `payload/patch_toon.sh`, which is the script that's actually run on the Toon
 to enable SSH access. The rest of the application basically just opens an injection vector to make that
@@ -72,8 +72,8 @@ Then reset your Toon and let the magic happen :)
 usage: sudo python . [-h] [--serial-port PATH] [--ssh-public-key PATH]
                   [--output-ssh-key PATH] [--private-key-password PASSWORD]
                   [--output-level INFO|DEBUG] [--jtag-available]
-                  [--dont-check-uboot] [--dont-cleanup_payload]
-                  [--dont-reboot_after] [--boot-only]
+                  [--dont-check-uboot] [--dont-cleanup-payload]
+                  [--dont-reboot-after] [--boot-only]
 
 Root your Toon.
 
@@ -100,10 +100,10 @@ optional arguments:
   --dont-check-uboot    Don't check whether we can access the installer
                         version of U-Boot before using JTAG to start up the
                         custom one.
-  --dont-cleanup_payload
+  --dont-cleanup-payload
                         Leave the payload in /payload. Use this if you want to
                         include more files and do something with them.
-  --dont-reboot_after   Don't reboot the Toon after rooting it. Use this if
+  --dont-reboot-after   Don't reboot the Toon after rooting it. Use this if
                         you want to use the serial console after rooting
   --boot-only           Don't install the payload, just boot into the serial
                         console
