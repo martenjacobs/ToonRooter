@@ -59,6 +59,7 @@ using `raspi_config` and reboot if necessary. Install the dependencies mentioned
 
 Then get and run this application:
 ```bash
+sudo apt install python-serial python-cryptography
 git clone https://github.com/martenjacobs/ToonRooter.git
 cd ToonRooter
 sudo python . --jtag-available
@@ -124,7 +125,9 @@ doesn't support using the Pi's headers as JTAG debugger).
 ```bash
 git clone --recursive git://git.code.sf.net/p/openocd/code openocd
 cd openocd
-./bootstrap
+sudo apt install make libtool pkg-config autoconf automake texinfo libusb-1.0 libusb-dev
+{
+./bootstrap &&\
 ./configure --enable-sysfsgpio\
      --enable-bcm2835gpio \
      --enable-maintainer-mode \
@@ -145,7 +148,9 @@ cd openocd
      --enable-usb_blaster_libftdi \
      --enable-ft2232_libftdi\
      --prefix=/usr\
+&&\
 make -j4
+} 2>&1 | tee openocd_build.log
 sudo make install
 ```
 > these instructions were based on the instructions posted [here](https://www.domoticaforum.eu/viewtopic.php?f=87&t=11230&start=210#p83745) by rboers
