@@ -125,7 +125,7 @@ doesn't support using the Pi's headers as JTAG debugger).
 ```bash
 git clone --recursive git://git.code.sf.net/p/openocd/code openocd
 cd openocd
-sudo apt install make libtool pkg-config autoconf automake texinfo libusb-1.0 libusb-dev
+sudo apt install make libtool libtool-bin pkg-config autoconf automake texinfo libusb-1.0 libusb-dev
 {
 ./bootstrap &&\
 ./configure --enable-sysfsgpio\
