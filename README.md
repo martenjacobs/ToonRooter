@@ -130,23 +130,6 @@ sudo apt install make libtool libtool-bin pkg-config autoconf automake texinfo l
 ./bootstrap &&\
 ./configure --enable-sysfsgpio\
      --enable-bcm2835gpio \
-     --enable-maintainer-mode \
-     --disable-werror \
-     --enable-ft2232_libftdi \
-     --enable-ep93xx \
-     --enable-at91rm9200 \
-     --enable-usbprog \
-     --enable-presto_libftdi \
-     --enable-jlink \
-     --enable-vsllink \
-     --enable-rlink \
-     --enable-arm-jtag-ew \
-     --enable-dummy \
-     --enable-buspirate \
-     --enable-ulink \
-     --enable-presto_libftdi \
-     --enable-usb_blaster_libftdi \
-     --enable-ft2232_libftdi\
      --prefix=/usr\
 &&\
 make -j4
