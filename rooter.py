@@ -146,7 +146,7 @@ def write_payload(port, ssh_key):
 def patch_toon(port, clean_up, reboot):
     log.info("Patching Toon")
     log.debug(port.read_until("/ # "))
-    password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(N))
+    password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
     port.write("sh payload/patch_toon.sh \"{}\"\n".format(password))
     try:
         while True:
