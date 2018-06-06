@@ -1,12 +1,17 @@
 #!/bin/sh
 set -e
 
+if [ $# -eq 0 ]; then
+  PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10`
+else
+  PASS="$1"
+fi
+
 cd `dirname "$0"`
 
-PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10`
 PASSENC=`/usr/bin/openssl passwd -crypt $PASS 2>/dev/null`
 
-echo ">>> Enabling root user. Your generated root password is: $PASS"
+echo ">>> Enabling root user. Your root password is: $PASS"
 if [[ ! -f /etc/passwd.preroot ]]; then
   cp /etc/passwd /etc/passwd.preroot
 fi

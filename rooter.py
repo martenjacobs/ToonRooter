@@ -6,6 +6,8 @@ import os
 import subprocess
 import tarfile
 import base64
+import string
+import random
 from time import sleep
 from serial.serialutil import Timeout
 import StringIO
@@ -144,7 +146,8 @@ def write_payload(port, ssh_key):
 def patch_toon(port, clean_up, reboot):
     log.info("Patching Toon")
     log.debug(port.read_until("/ # "))
-    port.write("sh payload/patch_toon.sh\n")
+    password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    port.write("sh payload/patch_toon.sh \"{}\"\n".format(password))
     try:
         while True:
             line = read_until(port, ["/ # ", "\n"])
