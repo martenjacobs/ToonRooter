@@ -1,7 +1,7 @@
 # ToonRooter
 
 ## What it does
-This application roots your Toon from a Raspberry Pi.
+This application roots your Toon from a Raspberry Pi or another device with a JTAG debugger attached.
 
 At the moment, the following is implemented:
  - Detection of the U-Boot version
@@ -67,6 +67,18 @@ sudo python . --jtag-available
 
 Then reset your Toon and let the magic happen :)
 
+## But I don't have a Pi
+
+You should definitely get a Pi.
+
+However, if you're adamant that you want to root your Toon from another device and
+you have a JTAG debugger lying around that works with OpenOCD, you should be able to
+use this script without issue. Just put the configuration file for your debugger in the
+`assets/adapters` directory (make sure it has a `.cfg` extension) and pass the name
+of the file (without extension) to the script using the `--jtag-hardware` argument.
+I'm pretty sure Windows is not going to work though, so you should use a Linux
+(virtual) machine.
+
 ## Command line arguments
 
 ```
@@ -96,8 +108,12 @@ optional arguments:
                         encryption. Ignored if you've used --ssh-public-key
   --output-level INFO|DEBUG
                         The level of output to print to the console
-  --jtag-available      Indicates you have your Pi connected to your Toon's
-                        JTAG headers
+  --jtag-available      Indicates you have a JTAG debugger connected to your
+                        Toon's JTAG headers
+  --jtag-hardware TYPE  The JTAG debugger type that we're working with. The
+                        default is to autodetect the JTAG debugger (which
+                        currently only works on Raspberry Pi). Supported
+                        values are: auto, rpi1, rpi2, rpi3
   --dont-check-uboot    Don't check whether we can access the installer
                         version of U-Boot before using JTAG to start up the
                         custom one.
