@@ -126,7 +126,7 @@ class Rooter(object):
         port.flush()
 
     def create_payload_tar(self):
-        tar_path = tempfile.mkstemp(suffix=".tar.gz")
+        tar_path = tempfile.mkstemp(suffix=".tar.gz")[1]
         ssh_key = self._ssh_pubkey_data
         with tarfile.open(tar_path, "w:gz") as tar:
             tar.add('payload/', arcname='payload')
