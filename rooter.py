@@ -68,7 +68,7 @@ class Rooter(object):
                 return
         if has_jtag:
             log.info("Loading new bootloader")
-            start_bootloader("assets/u-boot.bin")
+            self.start_bootloader("assets/u-boot.bin")
             port.reset_input_buffer()
             self._has_jtag = False
             self._check_uboot = True
