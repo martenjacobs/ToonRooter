@@ -60,8 +60,7 @@ log = logging.getLogger(__name__)
 
 def get_cpuinfo():
     info = {}
-    with open('/Users/marten/Desktop/proc_cpuinfo') as fo:
-    #with open('/proc/cpuinfo') as fo:
+    with open('/proc/cpuinfo') as fo:
         for line in fo:
             name_value = [s.strip() for s in line.split(':', 1)]
             if len(name_value) != 2:
