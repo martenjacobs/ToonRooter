@@ -13,6 +13,7 @@ At the moment, the following is implemented:
  - Generate SSH keys or let the user supply their own
 
 ### What it might do in the more distant future
+ - Have a proper test suite :D
  - Check the output from a few commands so we know if we're successful...
  - More fine-grained control of the installation package
 

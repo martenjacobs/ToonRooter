@@ -31,6 +31,7 @@ class Rooter(object):
         self._reboot_after = params['reboot_after']
         self._boot_only = params['boot_only']
         self._jtag_hardware = params['jtag_hardware']
+        self._password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
 
     def run(self):
         #TODO: clean this up
@@ -59,7 +60,9 @@ class Rooter(object):
                     log.info("Your Toon is now booting into a serial console")
                 else:
                     log.info("Waiting for boot up")
-                    self.write_payload()
+                    tar_file = self.create_payload_tar()
+                    self.write_payload(tar_file)
+                    os.remove(tar_file)
                     self.patch_toon()
                     log.info("Your Toon is now rooted. Please wait for it to boot up and try to log in using SSH")
                 return
@@ -139,9 +142,8 @@ class Rooter(object):
             tar.addfile(tarinfo=info, fileobj=StringIO.StringIO(ssh_key))
         return tar_path
 
-    def write_payload(self):
+    def write_payload(self, tar_path):
         port = self._port
-        tar_path = self.create_payload_tar()
 
         log.debug(port.read_until("/ # "))
         port.write("base64 -d | tar zxf -\n")
@@ -162,11 +164,10 @@ class Rooter(object):
         port.flush()
 
     def patch_toon(self):
-        (port, clean_up, reboot) = (
-            self._port, self._cleanup_payload, self._reboot_after)
+        (port, clean_up, reboot, password) = (
+            self._port, self._cleanup_payload, self._reboot_after, self._password)
         log.info("Patching Toon")
         log.debug(port.read_until("/ # "))
-        password = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
         port.write("sh payload/patch_toon.sh \"{}\"\n".format(password))
         try:
             while True:
