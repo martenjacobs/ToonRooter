@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+#create urandom which is missing on a 5.0.4 toon in u-booted shell
+if [ ! -e /dev/urandom ] ; then
+  mknod /dev/urandom c 1 9
+fi
+
 if [ $# -eq 0 ]; then
   PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10`
 else
