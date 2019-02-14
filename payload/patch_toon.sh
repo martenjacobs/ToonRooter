@@ -20,7 +20,7 @@ echo ">>> Enabling root user. Your root password is: $PASS"
 if [[ ! -f /etc/passwd.preroot ]]; then
   cp /etc/passwd /etc/passwd.preroot
 fi
-sed -i -e "s/root:[^:]*/root:$PASSENC/" /etc/passwd
+sed -i -e "s#root:[^:]*#root:$PASSENC#" /etc/passwd
 
 echo ">>> Opening ports 22, 80 and 10080 on firewall"
 if [[ ! -f /etc/default/iptables.conf.preroot ]]; then
