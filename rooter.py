@@ -57,6 +57,9 @@ class Rooter(object):
                 self.patch_uboot()
                 if boot_only:
                     log.info("Your Toon is now booting into a serial console")
+                    if not cleanup_payload:
+                        self.write_payload()
+                        log.info("The payload is stored in the payload directory")
                 else:
                     log.info("Waiting for boot up")
                     self.write_payload()
