@@ -29,6 +29,7 @@ class Rooter(object):
         self._check_uboot = params['check_uboot']
         self._cleanup_payload = params['cleanup_payload']
         self._reboot_after = params['reboot_after']
+        self._uboot_only = params['uboot_only']
         self._boot_only = params['boot_only']
         self._jtag_hardware = params['jtag_hardware']
 
@@ -40,6 +41,7 @@ class Rooter(object):
         check_uboot = self._check_uboot
         cleanup_payload = self._cleanup_payload
         reboot_after = self._reboot_after
+        uboot_only = self._uboot_only
         boot_only = self._boot_only
 
         if check_uboot:
@@ -54,14 +56,17 @@ class Rooter(object):
             if uboot_version in uboot_passwords:
                 log.info("Using password to log in")
                 self.access_uboot(uboot_passwords[uboot_version])
-                self.patch_uboot()
-                if boot_only:
-                    log.info("Your Toon is now booting into a serial console")
+                if uboot_only:
+                    log.info("Your Toon is now waiting in u-boot. You can you use a serial console for manual control.")
                 else:
-                    log.info("Waiting for boot up")
-                    self.write_payload()
-                    self.patch_toon()
-                    log.info("Your Toon is now rooted. Please wait for it to boot up and try to log in using SSH")
+                    self.patch_uboot()
+                    if boot_only:
+                        log.info("Your Toon is now booting into a serial console")
+                    else:
+                        log.info("Waiting for boot up")
+                        self.write_payload()
+                        self.patch_toon()
+                        log.info("Your Toon is now rooted. Please wait for it to boot up and try to log in using SSH")
                 return
             elif has_jtag is False:
                 log.error("Unable to log in using password (need JTAG, but it's disabled)")

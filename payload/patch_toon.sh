@@ -32,6 +32,9 @@ sed -i -e "s/^# These are all closed for Quby\/Toon:/# ADDED WHILE ROOTING\n\
 -A HCB-INPUT -p tcp -m tcp --dport 80 --tcp-flags SYN,RST,ACK SYN -j ACCEPT\n\
 # END/" /etc/default/iptables.conf
 
+echo ">>> Disable VPN on boot"
+sed -i 's~ovpn:235~#ovpn:235~g' /etc/inittab
+
 set +e
 
 echo ">>> Installing dropbear"
