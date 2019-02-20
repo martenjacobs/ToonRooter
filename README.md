@@ -122,6 +122,7 @@ optional arguments:
                         include more files and do something with them.
   --dont-reboot-after   Don't reboot the Toon after rooting it. Use this if
                         you want to use the serial console after rooting
+  --uboot-only          Only boot to the u-boot environment for manual control
   --boot-only           Don't install the payload, just boot into the serial
                         console
 ```
