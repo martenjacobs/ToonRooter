@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+#create urandom which is missing on a 5.0.4 toon in u-booted shell
+if [ ! -e /dev/urandom ] ; then
+  mknod /dev/urandom c 1 9
+fi
+
 if [ $# -eq 0 ]; then
   PASS=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 10`
 else
@@ -15,7 +20,7 @@ echo ">>> Enabling root user. Your root password is: $PASS"
 if [[ ! -f /etc/passwd.preroot ]]; then
   cp /etc/passwd /etc/passwd.preroot
 fi
-sed -i -e "s/root:[^:]*/root:$PASSENC/" /etc/passwd
+sed -i -e "s#root:[^:]*#root:$PASSENC#" /etc/passwd
 
 echo ">>> Opening ports 22, 80 and 10080 on firewall"
 if [[ ! -f /etc/default/iptables.conf.preroot ]]; then
@@ -26,6 +31,9 @@ sed -i -e "s/^# These are all closed for Quby\/Toon:/# ADDED WHILE ROOTING\n\
 -A HCB-INPUT -p tcp -m tcp --dport 10080 --tcp-flags SYN,RST,ACK SYN -j ACCEPT\n\
 -A HCB-INPUT -p tcp -m tcp --dport 80 --tcp-flags SYN,RST,ACK SYN -j ACCEPT\n\
 # END/" /etc/default/iptables.conf
+
+echo ">>> Disable VPN on boot"
+sed -i 's~ovpn:235~#ovpn:235~g' /etc/inittab
 
 set +e
 

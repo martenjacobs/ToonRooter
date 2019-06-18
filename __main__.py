@@ -46,6 +46,7 @@ parser.add_argument('--jtag-hardware',
 parser.add_argument('--dont-check-uboot',       action='store_true', help='Don\'t check whether we can access the installer version of U-Boot before using JTAG to start up the custom one.')
 parser.add_argument('--dont-cleanup-payload',   action='store_true', help='Leave the payload in /payload. Use this if you want to include more files and do something with them.')
 parser.add_argument('--dont-reboot-after',      action='store_true', help='Don\'t reboot the Toon after rooting it. Use this if you want to use the serial console after rooting')
+parser.add_argument('--uboot-only',             action='store_true', help='Only boot to the u-boot environment for manual control.')
 parser.add_argument('--boot-only',              action='store_true', help='Don\'t install the payload, just boot into the serial console')
 
 
@@ -131,6 +132,7 @@ def main():
     check_current_bootloader = not args.dont_check_uboot
     cleanup_payload = not args.dont_cleanup_payload
     reboot_after = not args.dont_reboot_after
+    uboot_only = args.uboot_only
     boot_only = args.boot_only
 
     if jtag_hardware == "auto":
@@ -161,6 +163,7 @@ def main():
         "check_uboot" : check_current_bootloader,
         "cleanup_payload" : cleanup_payload,
         "reboot_after" : reboot_after,
+        "uboot_only" : uboot_only,
         "boot_only" : boot_only,
         "jtag_hardware" : jtag_hardware
     }
