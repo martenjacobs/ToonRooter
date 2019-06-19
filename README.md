@@ -133,7 +133,7 @@ optional arguments:
 
 - Raspbian Stretch (or later) if you're using a Pi
 - Python 2.7
-- pySerial 3.4 (later)
+- pySerial 3.4 (or later)
 - OpenOCD from git (for newer Toons) (see [instructions](#install-openocd))
 
 ## Install OpenOCD
