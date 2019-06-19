@@ -53,6 +53,8 @@ Connect your Toon's debugging header to a Raspberry Pi according to the followin
 |  14  |  GND   |  9   |
 
 
+Check if you're running Raspbian Stretch or later. You can check this by running 
+`cat /etc/issue`, the response should be `Raspbian GNU/Linux 9 \n \l` or later.
 Then make sure the serial port on the Pi is enabled and the serial console is disabled
 using `raspi_config` and reboot if necessary. Install the dependencies mentioned in the
 [Dependencies](#dependencies)-section.
@@ -129,8 +131,9 @@ optional arguments:
 
 ## Dependencies
 
+- Raspbian Stretch (or later) if you're using a Pi
 - Python 2.7
-
+- pySerial 3.4 (later)
 - OpenOCD from git (for newer Toons) (see [instructions](#install-openocd))
 
 ## Install OpenOCD
