@@ -170,4 +170,4 @@ This application is based on instructions and software written by:
 - marcelr
 - klaphekje
 - rboers
-- other [domoticaforum.eu](https://www.domoticaforum.eu/viewforum.php?f=87) users
+- other [domoticaforum.eu](https://www.domoticaforum.eu/viewtopic.php?f=101) users
