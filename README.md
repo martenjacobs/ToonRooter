@@ -29,6 +29,10 @@ you should be able to access a serial console on the Toon and check out what's w
 to enable SSH access. The rest of the application basically just opens an injection vector to make that
 possible.
 
+## I have a Toon 2 ##
+The new Toon 2 isn't rootable using this tool. There are just a few people who can help you root a toon 2.
+You can take a look at this forum post if you want to have your Toon 2 rooted: https://www.domoticaforum.eu/viewtopic.php?f=101&t=12162
+
 ## How to use it?
 
 Make sure there's no power going in to either of the devices, and double check the connections
