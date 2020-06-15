@@ -56,11 +56,12 @@ Connect your Toon's debugging header to a Raspberry Pi according to the followin
 |  13  |  TxD   |  10  |
 |  14  |  GND   |  9   |
 
+If you don't know which pins on the Pi are which, see [pinout.xyz](https://pinout.xyz). The pins on the Toon are numbered similarly to the Pi, starting at the one marked as 1.
 
 Check if you're running Raspbian Stretch or later. You can check this by running 
 `cat /etc/issue`, the response should be `Raspbian GNU/Linux 9 \n \l` or later.
 Then make sure the serial port on the Pi is enabled and the serial console is disabled
-using `raspi_config` and reboot if necessary. Install the dependencies mentioned in the
+using `sudo raspi-config` and reboot if necessary. Install the dependencies mentioned in the
 [Dependencies](#dependencies)-section.
 
 Then get and run this application:
