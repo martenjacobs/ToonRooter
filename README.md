@@ -74,6 +74,30 @@ sudo python . --jtag-available
 
 Then reset your Toon and let the magic happen :)
 
+## Logging in to the Toon after rooting
+
+During the rooting process, the script will generate a random root password and output it to 
+the console. It will also generate an ssh private key. You can use either to log in to the 
+Toon after it is rooted. The script does not use a generic default password for all Toons 
+because it's considered a security hazard (and there's no easy way to change the password on 
+the Toon itself). 
+
+The most secure way of logging in is using the SSH private key (even better if you encrypted 
+the key using the `--private-key-password` argument). 
+
+After rooting, a file called `id_rsa` should be present in your working directory. 
+Logging in to the Toon can then be done by running:
+```bash 
+ssh -i id_rsa root@[TOON IP]
+```
+If you used the `--private-key-password` argument, you will now be asked to insert the password
+you provided there. If you didn't, it should log in without asking for a password at all. 
+
+In the latter case, please consider encrypting it later using the following command:
+```bash
+ssh-keygen -p -f id_rsa
+```
+
 ## It's not working!
 Please re-check your wiring. If you're sure the wiring is correct, try the command with 
 the `--output-level DEBUG` flag set and head over to 
