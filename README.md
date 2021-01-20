@@ -85,7 +85,8 @@ the Toon itself).
 The most secure way of logging in is using the SSH private key (even better if you encrypted 
 the key using the `--private-key-password` argument). 
 
-After rooting, a file called `id_rsa` should be present in your working directory. 
+After rooting, a file called `id_rsa` should be present in your working directory (or something 
+else if you used `--output-ssh-key`). 
 Logging in to the Toon can then be done by running:
 ```bash 
 ssh -i id_rsa root@[TOON IP]
