@@ -98,6 +98,9 @@ In the latter case, please consider encrypting it later using the following comm
 ssh-keygen -p -f id_rsa
 ```
 
+If for some reason you lost both the ssh private key and the password, you'll have to 
+re-root your Toon.
+
 ## It's not working!
 Please re-check your wiring. If you're sure the wiring is correct, try the command with 
 the `--output-level DEBUG` flag set and head over to 
