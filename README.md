@@ -1,5 +1,8 @@
 # ToonRooter
 
+## NOTE: this is ancient and not maintained anymore
+However, seeing as most people will only need to use it once or twice ever, it's good to know you can apparently still get it to work in 2026 by following [these instructions](https://github.com/martenjacobs/ToonRooter/issues/26) from @Nateonas.
+
 ## What it does
 This application roots your Toon from a Raspberry Pi or another device with a JTAG debugger attached.
 
